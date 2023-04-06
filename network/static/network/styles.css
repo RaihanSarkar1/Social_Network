@@ -1,0 +1,12 @@
+body {
+    padding: 10px;
+}
+
+#button_right{
+    text-align: right;
+}
+
+#postbox {
+    margin-top: 12px;
+    width: 50%;
+}

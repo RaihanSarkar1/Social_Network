@@ -3,11 +3,14 @@ from django.db import models
 
 
 class User(AbstractUser):
-    pass
+    id = models.BigAutoField(primary_key=True)
+
 
 
 # A user can have many posts
 class Post(models.Model):
+    id = models.BigAutoField(primary_key=True)
+
     #Many to one relationship
     #   A post can have one author/user
     #   A user can have many posts

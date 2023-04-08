@@ -14,11 +14,17 @@ class Post(models.Model):
     #Many to one relationship
     #   A post can have one author/user
     #   A user can have many posts
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
+    user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="posts")
     text = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
 
-    def __str__(self):
-        return f"{self.id} {self.user} : {self.text}"
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user": self.user,
+            "text": self.text,
+            "created_at": self.created_at,
+            "updated_at": self.updated_at
+        }

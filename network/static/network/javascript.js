@@ -32,28 +32,31 @@ function load() {
 function add_post(content){
 
     //GET the username from userid
-    let username = get_username(content.user_id);
-    console.log(username);
-    //Create new post
-    const post = document.createElement('div');
-    post.className = 'post';
-    post.innerHTML = `<h5>${username}</h5>${content.text}`;
+    username = get_username(content.user_id);
+    username.then(username => {
+        console.log(username);
 
-    // Add post to the DOM
-    document.querySelector("#posts").append(post);
+
+        //Create new post
+        const post = document.createElement('div');
+        post.className = 'post';
+        post.innerHTML = `<h5>${username}</h5>${content.text}`;
+
+        // Add post to the DOM
+        document.querySelector("#posts").append(post);
+    })
+
+    
 
 }
 
 // Get username
-function get_username(user_id){
+async function get_username(user_id){
     console.log(user_id);
-    fetch(`/username?user_id=${user_id}`)
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-        return data;
-    })
     
+    const resposne = await fetch(`/username?user_id=${user_id}`);
+    const data = await resposne.json();
+    return data.username;
 }
 
 

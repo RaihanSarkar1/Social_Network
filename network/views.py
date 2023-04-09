@@ -92,3 +92,29 @@ def get_username(request):
     username = user.username
     data = {'username': username}
     return JsonResponse(data, safe=False)
+
+def like(request, post_id):
+
+    post = Post.objects.get(id=post_id)
+    user = request.user.id
+
+    if post.like.filter(id=user).exists():
+        post.like.remove(user)
+        data = {'message': 'disliked'}
+        return JsonResponse(data, safe=False)
+    else:
+        post.like.add(user)
+        data = {'message': 'liked'}
+        return JsonResponse(data, safe=False)
+        
+def checkLike(request, post_id):
+
+    post = Post.objects.get(id=post_id)
+    user = request.user.id
+
+    if post.like.filter(id=user).exists():
+        data = {'message': 'likes'}
+        return JsonResponse(data, safe=False)
+    else:
+        data = {'message': 'dislikes'}
+        return JsonResponse(data, safe=False)

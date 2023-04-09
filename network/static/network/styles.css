@@ -8,7 +8,6 @@ body {
 
 #postbox {
     margin-top: 12px;
-    width: 50%;
 }
 
 #date {
@@ -17,6 +16,21 @@ body {
     color: #999;
 }
 
-#pic {
+#pro_pic {
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
+    background-color: thistle;
+    float: left;
 }
+
+#user_name {
+    margin-top: 3px;
+    margin-left: 3.5%;
+}
+
+#user_text {
+    clear: both;
+    padding-top: 10px;
+}
+

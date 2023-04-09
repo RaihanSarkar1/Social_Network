@@ -6,7 +6,7 @@ const quantity = 10;
 
 
 // load the global static url
-var staticUrl = DJANGO_STATIC_URL +  'static/img/user.png';
+var staticUrl = DJANGO_STATIC_URL;
 
 
 // When the DOM loads load the posts by running the load function
@@ -49,8 +49,24 @@ function add_post(content){
         post.classList.add("mb-2");
         post.classList.add("p-2");
 
-        //Show the username and content
-        post.innerHTML = `<h5>${username}</h5> <p>${content.text}</p>`;
+        // Add the profile pic
+        const pic = new Image();
+        pic.src = staticUrl +  'static/img/user.png';
+        pic.setAttribute('id','pro_pic');
+        post.appendChild(pic);
+
+
+        // Add username of the post
+        var post_user = document.createElement("h5");
+        post_user.innerHTML=username;
+        post_user.setAttribute('id', 'user_name');
+        post.append(post_user);
+
+        // Add the content
+        var post_text = document.createElement("p");
+        post_text.innerHTML=content.text;
+        post_text.setAttribute('id', 'user_text');
+        post.append(post_text);
 
         // Changing the date time format from django style
         var myDateTime = new Date(content.created_at);
@@ -72,6 +88,40 @@ function add_post(content){
 
         createdDate.innerHTML = `${formattedDateTime}`;
         post.appendChild(createdDate);
+
+        // Add the heart
+        const img = new Image();
+        img.setAttribute('id','heart');
+        fetch(`/checkLike/${content.id}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            if (data.message == "likes"){
+                img.src = staticUrl +  'static/img/hearted.png';
+            }
+            else
+                img.src = staticUrl +  'static/img/heart.png';
+
+        })
+        
+
+        post.appendChild(img);
+
+        post.addEventListener('click', function() {
+            fetch(`/like/${content.id}`)
+            .then(res => res.json())
+            .then(response => {
+                console.log('Success:', response.message);
+                if (response.message === "liked") {
+                    img.src = staticUrl + 'static/img/hearted.png';
+                }
+                else img.src = staticUrl +  'static/img/heart.png'; 
+
+            })
+            .catch(error => console.error('Error:', error));
+
+        });
+
 
         // Add post to the DOM
         document.querySelector("#posts").append(post);

@@ -4,6 +4,11 @@ let counter = 0;
 // Load 10 posts at a time
 const quantity = 10;
 
+
+// load the global static url
+var staticUrl = DJANGO_STATIC_URL +  'static/img/user.png';
+
+
 // When the DOM loads load the posts by running the load function
 document.addEventListener('DOMContentLoaded', load)
 
@@ -38,8 +43,35 @@ function add_post(content){
 
         //Create new post
         const post = document.createElement('div');
-        post.className = 'post';
-        post.innerHTML = `<h5>${username}</h5>${content.text}`;
+        post.setAttribute('id','post');
+        post.classList.add("border");
+        post.classList.add("rounded");
+        post.classList.add("mb-2");
+        post.classList.add("p-2");
+
+        //Show the username and content
+        post.innerHTML = `<h5>${username}</h5> <p>${content.text}</p>`;
+
+        // Changing the date time format from django style
+        var myDateTime = new Date(content.created_at);
+        var formattedDateTime = myDateTime.toLocaleString("en-us", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            minute: "numeric",
+            second: "numeric",
+            hour12: true,
+
+        });
+
+        
+        
+        // Create an element to show date time
+        const createdDate = document.createElement('p');
+        createdDate.setAttribute('id','date');
+
+        createdDate.innerHTML = `${formattedDateTime}`;
+        post.appendChild(createdDate);
 
         // Add post to the DOM
         document.querySelector("#posts").append(post);

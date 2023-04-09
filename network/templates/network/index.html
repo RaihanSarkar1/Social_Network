@@ -1,9 +1,10 @@
 {% extends "network/layout.html" %}
 
+
 {% block body %}
 
     {% if user.is_authenticated %}
-    <div class="container-fluid border border-secondary py-3" id="postbox">
+    <div class="container-fluid border py-3 rounded" id="postbox">
 
         <form action="{% url 'create_post' %}" method="post">
             {% csrf_token %}
@@ -19,5 +20,7 @@
     {% endif %}
 
     
-    <div class="continer-fluid border" id="posts"></div>
+    <div class="continer-fluid" id="posts"></div>
+    
+
 {% endblock %}

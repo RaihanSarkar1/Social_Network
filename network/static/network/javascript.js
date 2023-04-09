@@ -36,7 +36,6 @@ function add_post(content){
     username.then(username => {
         console.log(username);
 
-
         //Create new post
         const post = document.createElement('div');
         post.className = 'post';

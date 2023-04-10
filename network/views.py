@@ -83,15 +83,19 @@ def posts(request):
     end = int(request.GET.get("end") or (start + 9))
     profile = int(request.GET.get("user"))
 
-    user_= request.user
-    user_id = user_.id
+    thisUser= request.user
+    thisUserID = thisUser.id
 
     if profile == 0:
         #getting the said amount of posts and converting it to JSON
         posts = list(Post.objects.order_by("-created_at").values()[start:end])
+        print(Post.objects.order_by("-created_at").values()[start:end])
     else:
-        posts = list(Post.objects.filter(user=user_id))
-   
+        user = User.objects.get(id = thisUserID)
+        user_posts = user.posts.all()
+        print("this ", user_posts.values())
+        posts = list(user_posts.values())
+        
     return JsonResponse(posts, safe=False)
 
 def get_username(request):

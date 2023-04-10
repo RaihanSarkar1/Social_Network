@@ -10,11 +10,17 @@ var staticUrl = DJANGO_STATIC_URL;
 
 
 // When the DOM loads load the posts by running the load function
-document.addEventListener('DOMContentLoaded', load)
+document.addEventListener('DOMContentLoaded', function() {
+    // event listener to call looad if profile is clicked
+    document.querySelector('#profile').addEventListener('click', () => load('profile'));
+    
+    //by deafult load index
+    load('index');
 
+})
 
 // load the posts
-function load() {
+function load(page) {
     // Set the start and end post counters
     start = counter;
     end = counter + quantity - 1;
@@ -22,8 +28,21 @@ function load() {
     //reset the counter to start at new mark
     counter = end + 1;
 
+    //Set the route according to the page
+    // Default route to all posts
+    route = `/posts?user=0&start=${start}&end=${end}`;
+
+    if (page === 'inbox') {
+        route = `/posts?user=0&start=${start}&end=${end}`;
+    }
+    else if (page === 'profile') {
+        route = `/posts?user=1&start=${start}&end=${end}`;
+    }
+    
+
+
     // Get the posts and add an element post
-    fetch(`/posts?start=${start}&end=${end}`)
+    fetch(route)
     .then(response => response.json())
     .then(data => {
         console.log(data);
@@ -92,30 +111,46 @@ function add_post(content){
         // Add the heart
         const img = new Image();
         img.setAttribute('id','heart');
+
+        // Create the count
+        const count = document.createElement('div');
+        count.setAttribute('id', 'count');
+
         fetch(`/checkLike/${content.id}`)
         .then(response => response.json())
         .then(data => {
             console.log(data);
             if (data.message == "likes"){
-                img.src = staticUrl +  'static/img/hearted.png';
+                img.src = staticUrl +  'static/img/upvoted.png';
+                count.innerHTML= data.count;
+
             }
-            else
-                img.src = staticUrl +  'static/img/heart.png';
+            else{
+                img.src = staticUrl +  'static/img/upvote.png';
+                count.innerHTML= data.count;
+            }
 
         })
         
-
         post.appendChild(img);
+        post.appendChild(count);
 
-        post.addEventListener('click', function() {
+        
+
+
+        img.addEventListener('click', function() {
             fetch(`/like/${content.id}`)
             .then(res => res.json())
             .then(response => {
-                console.log('Success:', response.message);
+                console.log('Success:', response.message, response.count);
                 if (response.message === "liked") {
-                    img.src = staticUrl + 'static/img/hearted.png';
+                    img.src = staticUrl + 'static/img/upvoted.png';
+                    count.innerHTML= response.count;
                 }
-                else img.src = staticUrl +  'static/img/heart.png'; 
+                else {
+                    img.src = staticUrl +  'static/img/upvote.png'; 
+                    count.innerHTML= response.count;
+                } 
 
             })
             .catch(error => console.error('Error:', error));

@@ -81,9 +81,17 @@ def posts(request):
     # get start and end point
     start = int(request.GET.get("start" or 0))
     end = int(request.GET.get("end") or (start + 9))
+    profile = int(request.GET.get("user"))
 
-    #getting the said amount of posts and converting it to JSON
-    posts = list(Post.objects.order_by("-created_at").values()[start:end])
+    user_= request.user
+    user_id = user_.id
+
+    if profile == 0:
+        #getting the said amount of posts and converting it to JSON
+        posts = list(Post.objects.order_by("-created_at").values()[start:end])
+    else:
+        posts = list(Post.objects.filter(user=user_id))
+   
     return JsonResponse(posts, safe=False)
 
 def get_username(request):
@@ -98,13 +106,16 @@ def like(request, post_id):
     post = Post.objects.get(id=post_id)
     user = request.user.id
 
+
     if post.like.filter(id=user).exists():
         post.like.remove(user)
-        data = {'message': 'disliked'}
+        likeCount = post.like.count()
+        data = {'message': 'disliked', 'count': likeCount}
         return JsonResponse(data, safe=False)
     else:
         post.like.add(user)
-        data = {'message': 'liked'}
+        likeCount = post.like.count()
+        data = {'message': 'liked', 'count': likeCount}
         return JsonResponse(data, safe=False)
         
 def checkLike(request, post_id):
@@ -112,9 +123,17 @@ def checkLike(request, post_id):
     post = Post.objects.get(id=post_id)
     user = request.user.id
 
+    likeCount = post.like.count()
+
     if post.like.filter(id=user).exists():
-        data = {'message': 'likes'}
+        data = {'message': 'likes', 'count': likeCount}
         return JsonResponse(data, safe=False)
     else:
-        data = {'message': 'dislikes'}
+        data = {'message': 'dislikes', 'count': likeCount}
         return JsonResponse(data, safe=False)
+    
+
+def profile(request):
+    return render(request, "network/profile.html",{
+        "User": User
+    })

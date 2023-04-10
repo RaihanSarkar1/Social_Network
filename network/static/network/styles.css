@@ -8,6 +8,7 @@ body {
 
 #postbox {
     margin-top: 12px;
+    margin-bottom: 8px;
 }
 
 #date {
@@ -34,3 +35,11 @@ body {
     padding-top: 10px;
 }
 
+#heart {
+    display: inline-block;
+}
+
+#count {
+    display: inline-block;
+    padding-left: 10px;
+}

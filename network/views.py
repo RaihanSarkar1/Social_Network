@@ -137,7 +137,9 @@ def checkLike(request, post_id):
         return JsonResponse(data, safe=False)
     
 
-def profile(request):
-    return render(request, "network/profile.html",{
-        "User": User
+def profile(request, username):
+    # .values() can return a list of dicts. the parameters can be the fields you want to return
+    thatUser = User.objects.get(username=username)
+    return render(request, "network/profile.html", {
+        "User": thatUser
     })

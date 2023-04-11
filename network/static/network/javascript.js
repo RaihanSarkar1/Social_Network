@@ -11,8 +11,8 @@ var staticUrl = DJANGO_STATIC_URL;
 
 // When the DOM loads load the posts by running the load function
 document.addEventListener('DOMContentLoaded', function() {
-    // event listener to call looad if profile is clicked
-    document.querySelector('#profile').addEventListener('click', () => load('profile'));
+    // event listener to call load if profile is clicked
+    // document.querySelector('#profile').addEventListener('click', () => load('profile'));
     
     //by deafult load index
     load('index');
@@ -21,6 +21,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // load the posts
 function load(page) {
+    // Show the post box and hide other views
+    document.querySelector('#posts').style.display = 'block';
+
     // Set the start and end post counters
     start = counter;
     end = counter + quantity - 1;
@@ -52,6 +55,41 @@ function load(page) {
     })
 }
 
+// Loads the profile of user
+function load_profile(username) {
+
+    // Redirect to profile page
+    window.location.href = '/profile/' + username;
+
+    // Show the profile view and hide other views
+    document.querySelector('#profile_view').style.display = 'block';
+    document.querySelector('#posts').style.display = 'none';
+
+    /*
+    route = `profile/${username}`
+    fetch(route)
+    .then(response => response.json())
+    .then(data => {
+        // getting a string converting to JSON
+        user_data = JSON.parse(data);
+        // getting an array
+        console.log(user_data[0]);
+        profileData = user_data[0].fields
+              
+
+        // Create and append username to the profile view
+        const profileV = document.querySelector('#profile_view');
+        username = document.querySelector('#username');
+        username.innerHTML = profileData.username;
+
+
+        
+    })
+
+    */
+
+}
+
 // Add a new post to the DOM
 function add_post(content){
 
@@ -79,7 +117,14 @@ function add_post(content){
         var post_user = document.createElement("h5");
         post_user.innerHTML=username;
         post_user.setAttribute('id', 'user_name');
+        post_user.style.cursor = 'pointer';
+
         post.append(post_user);
+
+        // Adding an event listener to detect a click on the username
+        post_user.addEventListener('click', function() {
+            load_profile(username);
+        })
 
         // Add the content
         var post_text = document.createElement("p");

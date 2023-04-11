@@ -138,7 +138,43 @@ def checkLike(request, post_id):
 
 def profile(request, username):
     # .values() can return a list of dicts. the parameters can be the fields you want to return
+    thisUser = request.user
     thatUser = User.objects.get(username=username)
+
+    # Checking if the current user follows that user
+    if thisUser.following.filter(username=username).exists():
+        followed = True
+    else:
+        followed = False
+
+
     return render(request, "network/profile.html", {
-        "User": thatUser
+        "User": thatUser,
+        "Followed":  followed,
     })
+
+def follow(request):
+    user = request.user
+
+    return render(request, "network/follow.html", {
+        "User": user, 
+    })
+
+def checkFollow(request, username):
+    user = request.user
+    user_id = user.id 
+    thisUser= User.objects.get(id=user_id)
+    if thisUser.following.filter(user=username).exists():
+        thisUser.following.remove(username)
+        following = "false"
+    else:
+        thisUser.following.add(username)
+        following = "true"
+
+    data = {'Following': Following}
+    
+    return JsonResponse(data, safe=False)
+
+
+
+

@@ -1,0 +1,21 @@
+{% extends "network/layout.html" %}
+
+
+{% block body %}
+    <div id="follow_view" class="container-fluid border p-4">
+        
+        <h5>Following:</h5>
+        {% if User.following.exists %}
+            {% for person in User.following.all %}
+                <p>{{ person.username }}</p>
+            {% endfor %}
+        {% else %}
+            You are not following anyone
+        {% endif %}
+
+        
+    </div>
+
+    <div class="continer-fluid" id="posts"></div>
+
+{% endblock %}

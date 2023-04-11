@@ -13,6 +13,9 @@ var staticUrl = DJANGO_STATIC_URL;
 document.addEventListener('DOMContentLoaded', function() {
     // event listener to call load if profile is clicked
     document.querySelector('#index').addEventListener('click', () => load('index'));
+
+    
+
     
     
         
@@ -35,13 +38,26 @@ document.addEventListener('DOMContentLoaded', function() {
         // Load the posts of the user
         load(username);
 
+        document.querySelector('#btn_follow').addEventListener('click', () => {
+            console.log(username);
+            fetch(`checkFollow/raihan`)
+            .then(response => console.log(response.json()))
+
+        });
+
     }
 
-    // If there is the element posts in the Dom
+    // If there is the element posts in the DOM
     if (document.getElementById("index_view")) {
         // Load the posts
         load('index');
     }
+
+    // If there is the element posts in the DOM
+    if (document.getElementById("follow_view")) {
+        
+    }
+    
     
 
 })

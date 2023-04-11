@@ -3,15 +3,16 @@
 
 {% block body %}
     <div id="profile_view" class="container-fluid border p-4">
-        <h5> {{ User.username }}</h5>
+        <h5>{{ User.username }}</h5>
         <p>Following: {{ User.following.count }}  Follwers: {{ User.followers.count }}</p>  
-        <button id="btn_follow" type="button" class="btn btn-primary">Follow</button>
-        <button id="btn_unfollow" type="button" class="btn btn-danger">Unfollow</button>
-    </div>
+        
+        {% if Followed %}
+            <button id="btn_unfollow" type="button" class="btn btn-danger">Unfollow</button>
+        {% else %}
+            <button id="btn_follow" type="button" class="btn btn-primary">Follow</button>
+        {% endif %}
+        </div>
 
     <div class="continer-fluid" id="posts"></div>
-
-
-
 
 {% endblock %}

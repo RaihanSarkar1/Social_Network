@@ -14,78 +14,75 @@ document.addEventListener('DOMContentLoaded', function() {
     // event listener to call load if profile is clicked
     document.querySelector('#index').addEventListener('click', () => load('index'));
     
-    //by deafult load index
-    load('index');
+    
+        
+
+    if (document.getElementById("profile_view")) {
+        
+        // Printing the URL
+        console.log(window.location.href);
+        
+        // Getting the username from the URL
+        // get the url
+        const url = window.location.href;
+        const parts = url.split('/');
+        const last_segment = parts.pop() || parts.pop();    // if the ending is / then first pop is empty so it will get the next string from second pop
+        
+        console.log(last_segment);
+
+        username = last_segment;
+        
+        // Load the posts of the user
+        load(username);
+
+    }
+
+    // If there is the element posts in the Dom
+    if (document.getElementById("index_view")) {
+        // Load the posts
+        load('index');
+    }
+    
 
 })
 
 // load the posts
-function load(page) {
-    if (page === 'index') {
-        // Show the post box and hide other views
-        document.querySelector('#posts').style.display = 'block';
+function load(view) {
+    
+    // Set the start and end post counters
+    start = counter;
+    end = counter + quantity - 1;
 
-        // Set the start and end post counters
-        start = counter;
-        end = counter + quantity - 1;
+    //reset the counter to start at new mark
+    counter = end + 1;
 
-        //reset the counter to start at new mark
-        counter = end + 1;
-
-        //Set the route according to the page
+    //Set the route according to the view
+    if (view === 'index'){
         // Default route to all posts
-        route = `/posts?start=${start}&end=${end}`;
-
-
-
-        // Get the posts and add an element post
-        fetch(route)
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            data.forEach(element => {
-                add_post(element);
-            });
-        })
+        route = `/posts?start=${start}&end=${end}&user=null`;
     }
     else {
-        document.querySelector('#posts').style.display = 'none';
-        load_profile(page);
+        route = `/posts?start=${start}&end=${end}&user=${view}`;
     }
+
+    // Get the posts and add an element post
+    fetch(route)
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        data.forEach(element => {
+            add_post(element);
+        });
+    })
+
     
 }
 
-// Loads the profile of user
+// Redirects to the profile page of user
 function load_profile(username) {
 
     // Redirect to profile page
     window.location.href = '/profile/' + username;
-
-    // Show the profile view and hide other views
-    document.querySelector('#profile_view').style.display = 'block';
-
-    /*
-    route = `profile/${username}`
-    fetch(route)
-    .then(response => response.json())
-    .then(data => {
-        // getting a string converting to JSON
-        user_data = JSON.parse(data);
-        // getting an array
-        console.log(user_data[0]);
-        profileData = user_data[0].fields
-              
-
-        // Create and append username to the profile view
-        const profileV = document.querySelector('#profile_view');
-        username = document.querySelector('#username');
-        username.innerHTML = profileData.username;
-
-
-        
-    })
-
-    */
 
 }
 
@@ -122,7 +119,7 @@ function add_post(content){
 
         // Adding an event listener to detect a click on the username
         post_user.addEventListener('click', function() {
-            load(username);
+            load_profile(username);
         })
 
         // Add the content
@@ -165,12 +162,12 @@ function add_post(content){
         .then(data => {
             console.log(data);
             if (data.message == "likes"){
-                img.src = staticUrl +  'static/img/upvoted.png';
+                img.src = staticUrl +  'static/img/hearted.png';
                 count.innerHTML= data.count;
 
             }
             else{
-                img.src = staticUrl +  'static/img/upvote.png';
+                img.src = staticUrl +  'static/img/heart.png';
                 count.innerHTML= data.count;
             }
 
@@ -188,11 +185,11 @@ function add_post(content){
             .then(response => {
                 console.log('Success:', response.message, response.count);
                 if (response.message === "liked") {
-                    img.src = staticUrl + 'static/img/upvoted.png';
+                    img.src = staticUrl + 'static/img/hearted.png';
                     count.innerHTML= response.count;
                 }
                 else {
-                    img.src = staticUrl +  'static/img/upvote.png'; 
+                    img.src = staticUrl +  'static/img/heart.png'; 
                     count.innerHTML= response.count;
                 } 
 

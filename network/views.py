@@ -81,17 +81,21 @@ def posts(request):
     # get start and end point
     start = int(request.GET.get("start" or 0))
     end = int(request.GET.get("end") or (start + 9))
-
-    thisUser= request.user
-    thisUserID = thisUser.id
+    user = str(request.GET.get("user"))
 
 
-    #getting the said amount of posts and converting it to JSON
-    posts = list(Post.objects.order_by("-created_at").values()[start:end])
-    print(Post.objects.order_by("-created_at").values()[start:end])
+    print(user)
+    if user != "null":  
+        user = User.objects.get(username=user)
+        user_id = user.id
+        #getting the said amount of posts and converting it to JSON
+        posts = list(Post.objects.filter(user_id=user_id).order_by("-created_at").values()[start:end])
+    else:
+        posts = list(Post.objects.order_by("-created_at").values()[start:end])
+
+    return JsonResponse(posts, safe=False)
 
         
-    return JsonResponse(posts, safe=False)
 
 def get_username(request):
     user_id = request.GET.get("user_id")

@@ -11,10 +11,6 @@ body {
     margin-bottom: 8px;
 }
 
-#posts {
-    display: none;
-}
-
 #date {
     font-family: sans-serif;
     font-size: 12px;

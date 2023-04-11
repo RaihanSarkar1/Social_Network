@@ -4,14 +4,14 @@
 {% block body %}
 
 
-    <div class="container">
+    <div class="container" id="index_view">
         
         {% if user.is_authenticated %}
-            <div class="container-fluid border py-3 rounded" id="postbox">
+            <div class="container-fluid border pt-3 rounded" id="postbox">
                 
                 <form action="{% url 'create_post' %}" method="post">
                     {% csrf_token %}
-                    <textarea class="form-control" name="text" id="" placeholder="Share your thoughts.. " ></textarea>
+                    <textarea class="form-control " name="text" id="" placeholder="Share your thoughts.. " ></textarea>
                     
                     <div id="button_right">
                         <button class="btn btn-primary mt-2" id="post_btn">Post</button>

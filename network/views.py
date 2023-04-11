@@ -81,20 +81,15 @@ def posts(request):
     # get start and end point
     start = int(request.GET.get("start" or 0))
     end = int(request.GET.get("end") or (start + 9))
-    profile = int(request.GET.get("user"))
 
     thisUser= request.user
     thisUserID = thisUser.id
 
-    if profile == 0:
-        #getting the said amount of posts and converting it to JSON
-        posts = list(Post.objects.order_by("-created_at").values()[start:end])
-        print(Post.objects.order_by("-created_at").values()[start:end])
-    else:
-        user = User.objects.get(id = thisUserID)
-        user_posts = user.posts.all()
-        print("this ", user_posts.values())
-        posts = list(user_posts.values())
+
+    #getting the said amount of posts and converting it to JSON
+    posts = list(Post.objects.order_by("-created_at").values()[start:end])
+    print(Post.objects.order_by("-created_at").values()[start:end])
+
         
     return JsonResponse(posts, safe=False)
 

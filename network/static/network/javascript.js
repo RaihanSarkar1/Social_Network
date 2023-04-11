@@ -12,7 +12,7 @@ var staticUrl = DJANGO_STATIC_URL;
 // When the DOM loads load the posts by running the load function
 document.addEventListener('DOMContentLoaded', function() {
     // event listener to call load if profile is clicked
-    // document.querySelector('#profile').addEventListener('click', () => load('profile'));
+    document.querySelector('#index').addEventListener('click', () => load('index'));
     
     //by deafult load index
     load('index');
@@ -21,38 +21,38 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // load the posts
 function load(page) {
-    // Show the post box and hide other views
-    document.querySelector('#posts').style.display = 'block';
+    if (page === 'index') {
+        // Show the post box and hide other views
+        document.querySelector('#posts').style.display = 'block';
 
-    // Set the start and end post counters
-    start = counter;
-    end = counter + quantity - 1;
+        // Set the start and end post counters
+        start = counter;
+        end = counter + quantity - 1;
 
-    //reset the counter to start at new mark
-    counter = end + 1;
+        //reset the counter to start at new mark
+        counter = end + 1;
 
-    //Set the route according to the page
-    // Default route to all posts
-    route = `/posts?user=0&start=${start}&end=${end}`;
+        //Set the route according to the page
+        // Default route to all posts
+        route = `/posts?start=${start}&end=${end}`;
 
-    if (page === 'inbox') {
-        route = `/posts?user=0&start=${start}&end=${end}`;
+
+
+        // Get the posts and add an element post
+        fetch(route)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            data.forEach(element => {
+                add_post(element);
+            });
+        })
     }
-    else if (page === 'profile') {
-        route = `/posts?user=1&start=${start}&end=${end}`;
+    else {
+        document.querySelector('#posts').style.display = 'none';
+        load_profile(page);
     }
     
-
-
-    // Get the posts and add an element post
-    fetch(route)
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-        data.forEach(element => {
-            add_post(element);
-        });
-    })
 }
 
 // Loads the profile of user
@@ -63,7 +63,6 @@ function load_profile(username) {
 
     // Show the profile view and hide other views
     document.querySelector('#profile_view').style.display = 'block';
-    document.querySelector('#posts').style.display = 'none';
 
     /*
     route = `profile/${username}`
@@ -123,7 +122,7 @@ function add_post(content){
 
         // Adding an event listener to detect a click on the username
         post_user.addEventListener('click', function() {
-            load_profile(username);
+            load(username);
         })
 
         // Add the content

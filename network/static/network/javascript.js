@@ -33,15 +33,66 @@ document.addEventListener('DOMContentLoaded', function() {
         
         console.log(last_segment);
 
-        username = last_segment;
+        const username = last_segment;
         
         // Load the posts of the user
         load(username);
 
+        console.log(`This is the ${username}`);
+
+        // Check if the current user is following that user or not
+        document.querySelector('#btn_follow').style.display = 'none';
+        document.querySelector('#btn_unfollow').style.display = 'none';
+
+        fetch(`/checkFollow/${username}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                if(data.Following === 'true'){
+                    document.querySelector('#btn_follow').style.display = 'none';
+                    document.querySelector('#btn_unfollow').style.display = 'block';
+                } else {
+                    document.querySelector('#btn_follow').style.display = 'block';
+                    document.querySelector('#btn_unfollow').style.display = 'none';
+                }
+            
+            })
+        
+        //  eventlistener for follow button
         document.querySelector('#btn_follow').addEventListener('click', () => {
             console.log(username);
-            fetch(`checkFollow/raihan`)
-            .then(response => console.log(response.json()))
+            fetch(`/pushFollow/${username}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                if(data.Following === 'true'){
+                    document.querySelector('#btn_follow').style.display = 'none';
+                    document.querySelector('#btn_unfollow').style.display = 'block';
+                } else {
+                    document.querySelector('#btn_follow').style.display = 'block';
+                    document.querySelector('#btn_unfollow').style.display = 'none';
+                }
+            
+            })
+
+        });
+
+        //  eventlistener for follow button
+        document.querySelector('#btn_unfollow').addEventListener('click', () => {
+            console.log(username);
+            fetch(`/pushFollow/${username}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                if(data.Following === 'true'){
+                    document.querySelector('#btn_follow').style.display = 'none';
+                    document.querySelector('#btn_unfollow').style.display = 'block';
+                } else {
+                    document.querySelector('#btn_follow').style.display = 'block';
+                    document.querySelector('#btn_unfollow').style.display = 'none';
+                }
+            
+            })
 
         });
 

@@ -6,11 +6,9 @@
         <h5>{{ User.username }}</h5>
         <p>Following: {{ User.following.count }}  Follwers: {{ User.followers.count }}</p>  
         
-        {% if Followed %}
             <button id="btn_unfollow" type="button" class="btn btn-danger">Unfollow</button>
-        {% else %}
             <button id="btn_follow" type="button" class="btn btn-primary">Follow</button>
-        {% endif %}
+
         </div>
 
     <div class="continer-fluid" id="posts"></div>

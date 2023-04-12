@@ -160,18 +160,39 @@ def follow(request):
         "User": user, 
     })
 
-def checkFollow(request, username):
+# Push Follow API
+def pushFollow(request, username):
     user = request.user
-    user_id = user.id 
-    thisUser= User.objects.get(id=user_id)
-    if thisUser.following.filter(user=username).exists():
-        thisUser.following.remove(username)
+    thisUser= User.objects.get(username=user)
+    thatUsername = username
+    try:
+        thatUser = User.objects.get(username=thatUsername)
+    except User.DoesNotExist:
+        print("User matching query does not exist.", thatUsername)
+    thatUserId = thatUser.id
+    if thisUser.following.filter(username=thatUsername).exists():
+        thisUser.following.remove(thatUserId)
         following = "false"
     else:
-        thisUser.following.add(username)
+        thisUser.following.add(thatUserId)
         following = "true"
 
-    data = {'Following': Following}
+    data = {'Following': following, 'Username': thatUser.username }
+    
+    return JsonResponse(data, safe=False)
+
+    # Check Follow API
+def checkFollow(request, username):
+    user = request.user
+    thisUser= User.objects.get(username=user)
+    thatUser = User.objects.get(username=username)
+    thatUserId = thatUser.id
+    if thisUser.following.filter(username=username).exists():
+        following = "true"
+    else:
+        following = "false"
+
+    data = {'Following': following}
     
     return JsonResponse(data, safe=False)
 

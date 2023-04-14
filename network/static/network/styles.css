@@ -14,6 +14,7 @@ body {
 #date {
     font-family: sans-serif;
     font-size: 12px;
+    padding-left: 15px;
     color: #999;
 }
 
@@ -32,14 +33,15 @@ body {
 
 #user_text {
     clear: both;
-    padding-top: 10px;
-    padding-left: 5px;
-    padding-right: 30px;
-    
+    padding: 15px;
+    white-space: pre-wrap;
+    display: inline-block;   
 }
 
 #heart {
     display: inline-block;
+    padding-left: 10px;
+
 }
 
 #count {

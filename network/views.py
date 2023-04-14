@@ -187,7 +187,12 @@ def checkFollow(request, username):
     thisUser= User.objects.get(username=user)
     thatUser = User.objects.get(username=username)
     thatUserId = thatUser.id
-    if thisUser.following.filter(username=username).exists():
+    sameUser = "false"
+    if thisUser == thatUser:
+        sameUser = "true"
+        data = {"SameUser": sameUser}
+        return JsonResponse(data, safe=False)
+    elif thisUser.following.filter(username=username).exists():
         following = "true"
     else:
         following = "false"

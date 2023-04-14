@@ -7,7 +7,7 @@
         <h5>Following:</h5>
         {% if User.following.exists %}
             {% for person in User.following.all %}
-                <p>{{ person.username }}</p>
+                <span>{{ person.username }}</span> <br>
             {% endfor %}
         {% else %}
             You are not following anyone

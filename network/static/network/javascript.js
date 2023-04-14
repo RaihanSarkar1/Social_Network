@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     
         
-
+    // If there is the element profile_view in the DOM that means it is in the profile page
     if (document.getElementById("profile_view")) {
         
         // Printing the URL
@@ -48,7 +48,9 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(data => {
                 console.log(data)
-                if(data.Following === 'true'){
+                if(data.SameUser === 'true') {
+                }
+                else if(data.Following === 'true'){
                     document.querySelector('#btn_follow').style.display = 'none';
                     document.querySelector('#btn_unfollow').style.display = 'block';
                 } else {
@@ -98,13 +100,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     }
 
-    // If there is the element posts in the DOM
+    // If there is the element index_view in the DOM
     if (document.getElementById("index_view")) {
         // Load the posts
         load('index');
     }
 
-    // If there is the element posts in the DOM
+    // If there is the element follow_view in the DOM
     if (document.getElementById("follow_view")) {
         
     }
@@ -190,7 +192,7 @@ function add_post(content){
         })
 
         // Add the content
-        var post_text = document.createElement("p");
+        var post_text = document.createElement("span");
         post_text.innerHTML=content.text;
         post_text.setAttribute('id', 'user_text');
         post.append(post_text);

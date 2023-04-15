@@ -104,16 +104,48 @@ document.addEventListener('DOMContentLoaded', function() {
     if (document.getElementById("index_view")) {
         // Load the posts
         load('index');
+
+        // If scrolled to bottom, load the next 10 posts
+        window.onscroll = () => {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+                load('index');
+            }
+        };
     }
 
     // If there is the element follow_view in the DOM
     if (document.getElementById("follow_view")) {
-        
+        load_follow_posts();
+
+        // If scrolled to bottom, load the next 5 posts
+        window.onscroll = () => {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+                load_follow_posts();
+            }
+        };
     }
     
     
 
 })
+
+// load the posts of the user
+function load_follow_posts() {
+    start = counter;
+    end = counter + quantity - 5;
+    counter = end + 1;
+
+    route = `/posts?start=${start}&end=${end}&user=null&follow=true`
+
+    fetch(route)
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        data.forEach(element => {
+            add_post(element);
+        });
+    })
+}
 
 // load the posts
 function load(view) {
@@ -190,6 +222,16 @@ function add_post(content){
         post_user.addEventListener('click', function() {
             load_profile(username);
         })
+
+        // Add the edit icon
+        const edit_icon = new Image();
+        edit_icon.setAttribute('id','edit');
+        edit_icon.style.cursor = 'pointer'
+        edit_icon.src = staticUrl +  'static/img/edit.png';
+        post.appendChild(edit_icon);
+
+
+
 
         // Add the content
         var post_text = document.createElement("span");

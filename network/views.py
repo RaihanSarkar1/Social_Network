@@ -82,10 +82,19 @@ def posts(request):
     start = int(request.GET.get("start" or 0))
     end = int(request.GET.get("end") or (start + 9))
     user = str(request.GET.get("user"))
+    follow = str(request.GET.get("follow"))
 
+    if user == "null" and follow == "true":
+        username = request.user
+        user = User.objects.get(username=username)
+        user_id = user.id
+        user_obj = User.objects.get(id=user_id)
+        following = user_obj.following.all()
+        # Using special query user__in here __in means for user in following list
+        posts = list(Post.objects.filter(user__in=following).order_by("-created_at").values()[start:end])
+        return JsonResponse(posts, safe=False)
 
-    print(user)
-    if user != "null":  
+    elif user != "null":  
         user = User.objects.get(username=user)
         user_id = user.id
         #getting the said amount of posts and converting it to JSON

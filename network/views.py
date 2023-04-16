@@ -210,6 +210,9 @@ def checkFollow(request, username):
     
     return JsonResponse(data, safe=False)
 
-
+def current_user(request):
+    user = request.user
+    
+    return JsonResponse(user.id, safe=False)
 
 

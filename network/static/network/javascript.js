@@ -190,6 +190,9 @@ function load_profile(username) {
 // Add a new post to the DOM
 function add_post(content){
 
+    // invoke the get current user function
+    get_current_user();
+
     //GET the username from userid
     username = get_username(content.user_id);
     username.then(username => {
@@ -223,12 +226,55 @@ function add_post(content){
             load_profile(username);
         })
 
-        // Add the edit icon
-        const edit_icon = new Image();
-        edit_icon.setAttribute('id','edit');
-        edit_icon.style.cursor = 'pointer'
-        edit_icon.src = staticUrl +  'static/img/edit.png';
-        post.appendChild(edit_icon);
+        // javascript to get the current user
+        var current_user_id = localStorage.getItem('user_id');
+        console.log(`The current user is ${current_user_id}`);
+        // check if the current user is the owner of the post
+        if (content.user_id == current_user_id){
+            // Add the delete icon
+            const delete_icon = new Image();
+            delete_icon.setAttribute('id','delete');
+            delete_icon.style.cursor = 'pointer'
+            delete_icon.src = staticUrl +  'static/img/delete.png';
+            post.appendChild(delete_icon);
+
+            // Add the edit icon
+            const edit_icon = new Image();
+            edit_icon.setAttribute('id','edit');
+            edit_icon.style.cursor = 'pointer'
+            edit_icon.src = staticUrl +  'static/img/edit.png';
+            post.appendChild(edit_icon);
+
+            // Adding an event listener to detect a click on the edit icon
+            edit_icon.addEventListener('click', function() {
+                fetch(`/edit/${content.id}`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        text: post_text
+                    })
+                })
+                .then(res => res.json())
+                .then(response => {
+                    console.log(response);
+                    
+                })
+            })
+
+            // Adding an event listener to detect a click on the delete icon
+            delete_icon.addEventListener('click', function() {
+                fetch(`/delete/${content.id}`)
+                .then(res => res.json())
+                .then(response => {
+                    console.log(response);
+                    if (response.message == "deleted"){
+                        post.remove();
+                    }
+                })
+            })
+        }
+        
+
+        
 
 
 
@@ -325,6 +371,18 @@ async function get_username(user_id){
     const resposne = await fetch(`/username?user_id=${user_id}`);
     const data = await resposne.json();
     return data.username;
+}
+
+// Javascript function to get the current user from django session
+
+function get_current_user(){
+    fetch('/current_user')
+    .then(response => response.json())
+    .then(data => {
+        console.log(`This is the current user: ${data}`);
+        // save the current user to local storage
+        localStorage.setItem('user_id', data);
+    })
 }
 
 

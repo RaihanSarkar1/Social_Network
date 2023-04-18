@@ -247,17 +247,35 @@ function add_post(content){
 
             // Adding an event listener to detect a click on the edit icon
             edit_icon.addEventListener('click', function() {
-                fetch(`/edit/${content.id}`, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        text: post_text
+
+                // replace text in span with an input text area and fill it with content.text and auto focus the textarea
+                var post_text = document.getElementById('user_text');
+                post_text.innerHTML = `<textarea id="edit_text" rows="3" cols="50">${content.text}`
+
+                // get the textarea and focus it
+                var edit_text = document.getElementById('edit_text');
+                edit_text.focus();
+                // get the text from the textarea on keypress
+                edit_text.addEventListener('keypress', function(e){
+                    // get the text from the textarea
+                    var text = edit_text.value;
+                    fetch(`/edit/${content.id}`, {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            text: text
+                        })
                     })
-                })
-                .then(res => res.json())
-                .then(response => {
-                    console.log(response);
-                    
-                })
+                    .then(res => res.json())
+                    .then(response => {
+                        console.log(response);
+                        
+                    })
+                }
+
+
+                
+                
+                
             })
 
             // Adding an event listener to detect a click on the delete icon

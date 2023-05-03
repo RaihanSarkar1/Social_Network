@@ -9,6 +9,7 @@ from django.http import JsonResponse
 import time
 # To convert data into JSON
 from django.core import serializers
+import json
 
 def index(request):
     return render(request, "network/index.html",{
@@ -219,6 +220,9 @@ def current_user(request):
 def edit(request, post_id):
     if request.method == "POST":
         post = Post.objects.get(id=post_id)
-        post.text = request.POST["text"]
+        # get the text from the fetch data
+        data = json.loads(request.body)
+        text = data.get("text", "")
+        post.text = text
         post.save()
         return render(request, "network/index.html")

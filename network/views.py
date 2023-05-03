@@ -226,3 +226,9 @@ def edit(request, post_id):
         post.text = text
         post.save()
         return render(request, "network/index.html")
+    
+def delete(request, post_id):
+    post = Post.objects.get(id=post_id)
+    post.delete()
+
+    return JsonResponse({'message': 'deleted'}, safe=False)

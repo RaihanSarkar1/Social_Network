@@ -222,8 +222,3 @@ def edit(request, post_id):
         post.text = request.POST["text"]
         post.save()
         return render(request, "network/index.html")
-    else:
-        post = Post.objects.get(id=post_id)
-        return render(request, "network/edit.html", {
-            "Post": post
-        })

@@ -8,6 +8,12 @@ const quantity = 10;
 // load the global static url
 var staticUrl = DJANGO_STATIC_URL;
 
+//Get csrf token cookie function
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  }
 
 
 // When the DOM loads load the posts by running the load function
@@ -269,29 +275,31 @@ function add_post(content) {
 
                 })
 
-                // edit_text.setSelectionRange(edit_text.value.length, edit_text.value.length);
 
                 // Adding an event listener to detect a click on the save button
-                // document.querySelector('#save_button').addEventListener('click', function() {
-                //     fetch(`/edit/${content.id}`, {
-                //         method: 'POST',
-                //         headers: {
-                //             'Content-Type': 'application/json'
-                //         },
-                //         body: JSON.stringify({
-                //             text: edit_text.value
-                //         })
-                //     })
-                //     .then(res => res.json())
-                //     .then(response => {
-                //         console.log(response);
-                //         if (response.message == "edited"){
-                //             post_text.innerHTML=edit_text.value;
-                //             edit_box.close();
-                //         }
-                //     })
+                document.querySelector('#edit_form').onsubmit = function() {
+                    var csrftoken = getCookie('csrftoken');
+                    console.log(csrftoken);
+                    fetch(`/edit/${content.id}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrftoken
+                        },
+                        body: JSON.stringify({
+                            text: edit_text.value
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(response => {
+                        console.log(response);
+                        if (response.message == "edited"){
+                            post_text.innerHTML=edit_text.value;
+                            edit_box.close();
+                        }
+                    })
 
-                // })
+                }
 
 
 

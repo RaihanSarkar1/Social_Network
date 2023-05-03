@@ -9,6 +9,7 @@ const quantity = 10;
 var staticUrl = DJANGO_STATIC_URL;
 
 
+
 // When the DOM loads load the posts by running the load function
 document.addEventListener('DOMContentLoaded', function() {
     // event listener to call load if profile is clicked
@@ -248,33 +249,36 @@ function add_post(content){
             // Adding an event listener to detect a click on the edit icon
             edit_icon.addEventListener('click', function() {
 
-                // replace text in span with an input text area and fill it with content.text and auto focus the textarea
-                var post_text = document.getElementById('user_text');
-                post_text.innerHTML = `<textarea id="edit_text" rows="3" cols="50">${content.text}`
-
-                // get the textarea and focus it
-                var edit_text = document.getElementById('edit_text');
+                edit_box = document.querySelector('dialog');
+                edit_box.showModal();
+                edit_text = document.querySelector('#edit_text');
+                edit_text.value = content.text;
                 edit_text.focus();
-                // get the text from the textarea on keypress
-                edit_text.addEventListener('keypress', function(e){
-                    // get the text from the textarea
-                    var text = edit_text.value;
-                    fetch(`/edit/${content.id}`, {
-                        method: 'POST',
-                        body: JSON.stringify({
-                            text: text
-                        })
-                    })
-                    .then(res => res.json())
-                    .then(response => {
-                        console.log(response);
-                        
-                    })
-                }
+                // edit_text.setSelectionRange(edit_text.value.length, edit_text.value.length);
 
+                // Adding an event listener to detect a click on the save button
+                // document.querySelector('#save_button').addEventListener('click', function() {
+                //     fetch(`/edit/${content.id}`, {
+                //         method: 'POST',
+                //         headers: {
+                //             'Content-Type': 'application/json'
+                //         },
+                //         body: JSON.stringify({
+                //             text: edit_text.value
+                //         })
+                //     })
+                //     .then(res => res.json())
+                //     .then(response => {
+                //         console.log(response);
+                //         if (response.message == "edited"){
+                //             post_text.innerHTML=edit_text.value;
+                //             edit_box.close();
+                //         }
+                //     })
 
+                // })
                 
-                
+                                       
                 
             })
 

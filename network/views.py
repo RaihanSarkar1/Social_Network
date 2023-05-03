@@ -216,3 +216,14 @@ def current_user(request):
     return JsonResponse(user.id, safe=False)
 
 
+def edit(request, post_id):
+    if request.method == "POST":
+        post = Post.objects.get(id=post_id)
+        post.text = request.POST["text"]
+        post.save()
+        return render(request, "network/index.html")
+    else:
+        post = Post.objects.get(id=post_id)
+        return render(request, "network/edit.html", {
+            "Post": post
+        })

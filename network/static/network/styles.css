@@ -65,3 +65,27 @@ body {
     display: inline-block;
     padding-left: 10px;
 }
+
+dialog {
+    padding: 20px;
+    /* background: green; */
+    border: none;
+    border-radius: 1rem;
+}
+
+dialog::backdrop {
+    background-color: hsla(190, 100%, 50%, 0.25);
+}
+
+#edit_text {
+    display: block;
+    margin-bottom: 10px;
+}
+
+#edit_cancel {
+}
+
+#edit_submit {
+}
+
+  

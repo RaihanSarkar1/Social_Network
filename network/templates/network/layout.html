@@ -46,6 +46,16 @@
         </nav>
         
         <div class="body">
+           
+            <dialog>
+                <form action="" method="post"> 
+                    {% csrf_token %}
+                    <textarea name="edit_text" id="edit_text" cols="100" rows="10"></textarea>
+                    <button type="submit" formmethod="dialog" class="btn btn-secondary" id="edit_submit">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="edit_submit">Submit</button>
+                    
+                </form>
+            </dialog>
             {% block body %}
             {% endblock %}
         </div>

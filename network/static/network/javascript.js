@@ -254,6 +254,19 @@ function add_post(content){
                 edit_text = document.querySelector('#edit_text');
                 edit_text.value = content.text;
                 edit_text.focus();
+
+                // Add event listener to detect if user clicked outside the dialog
+                edit_box.addEventListener("click", e => {
+                    const dialogDimensions = edit_box.getBoundingClientRect()
+                    if (
+                      e.clientX < dialogDimensions.left ||
+                      e.clientX > dialogDimensions.right ||
+                      e.clientY < dialogDimensions.top ||
+                      e.clientY > dialogDimensions.bottom
+                    ) {
+                      edit_box.close();
+                    }
+                  })
                 // edit_text.setSelectionRange(edit_text.value.length, edit_text.value.length);
 
                 // Adding an event listener to detect a click on the save button
